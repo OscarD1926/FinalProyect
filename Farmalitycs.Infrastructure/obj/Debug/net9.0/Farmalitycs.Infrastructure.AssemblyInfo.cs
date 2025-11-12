@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Farmalitycs.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bcc345c4d6aefb73f9994571d1360367e3bec152")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+724d65f03de804cfc356781253734d4a18051266")]
 [assembly: System.Reflection.AssemblyProductAttribute("Farmalitycs.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Farmalitycs.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
