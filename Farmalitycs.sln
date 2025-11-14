@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farmalitycs.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farmalitycs.ap", "Farmalitycs.ap\Farmalitycs.ap.csproj", "{96162B19-2C5B-4CD8-A92D-3A4F365C56B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farmalitycs.domi", "Farmalitycs.domi\Farmalitycs.domi.csproj", "{AB08F305-EE8D-4E26-B35C-256286A4AF85}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farmalitycs.Domain", "Farmalitycs.domi\Farmalitycs.Domain.csproj", "{AB08F305-EE8D-4E26-B35C-256286A4AF85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

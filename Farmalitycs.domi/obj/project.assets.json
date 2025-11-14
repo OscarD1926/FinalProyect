@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.domi\\Farmalitycs.domi.csproj",
-      "projectName": "Farmalitycs.domi",
-      "projectPath": "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.domi\\Farmalitycs.domi.csproj",
+      "projectUniqueName": "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.domi\\Farmalitycs.Domain.csproj",
+      "projectName": "Farmalitycs.Domain",
+      "projectPath": "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.domi\\Farmalitycs.Domain.csproj",
       "packagesPath": "C:\\Users\\disla\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.domi\\obj\\",
       "projectStyle": "PackageReference",
