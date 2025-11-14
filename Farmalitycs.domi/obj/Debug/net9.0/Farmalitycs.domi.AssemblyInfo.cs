@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Farmalitycs.domi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+724d65f03de804cfc356781253734d4a18051266")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a23c6727c58701b921cf3eb76fc86f2bd5ad1bae")]
 [assembly: System.Reflection.AssemblyProductAttribute("Farmalitycs.domi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Farmalitycs.domi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Farmalitycs.Domain.Entities
 {
@@ -12,6 +8,8 @@ namespace Farmalitycs.Domain.Entities
         public string FullName { get; set; }
         public string Identification { get; set; }
         public string Phone { get; set; }
+        public List<Prescription> Prescriptions { get; set; } = new();
     }
 }
+
 
