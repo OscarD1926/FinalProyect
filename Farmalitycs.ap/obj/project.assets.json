@@ -1758,6 +1758,20 @@
           }
         }
       },
+      "Farmalitycs.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "Farmalitycs.Domain": "1.0.0",
+          "Farmalitycs.Infrastructure": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Farmalitycs.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Farmalitycs.Application.dll": {}
+        }
+      },
       "Farmalitycs.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -5109,6 +5123,11 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Farmalitycs.Application/1.0.0": {
+      "type": "project",
+      "path": "../Farmalitycs.Application/Farmalitycs.Application.csproj",
+      "msbuildProject": "../Farmalitycs.Application/Farmalitycs.Application.csproj"
+    },
     "Farmalitycs.Domain/1.0.0": {
       "type": "project",
       "path": "../Farmalitycs.domi/Farmalitycs.Domain.csproj",
@@ -5122,6 +5141,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "Farmalitycs.Application >= 1.0.0",
       "Farmalitycs.Domain >= 1.0.0",
       "Farmalitycs.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.9",
@@ -5163,6 +5183,9 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.Application\\Farmalitycs.Application.csproj": {
+              "projectPath": "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.Application\\Farmalitycs.Application.csproj"
+            },
             "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.domi\\Farmalitycs.Domain.csproj": {
               "projectPath": "C:\\Users\\disla\\source\\repos\\Final Project\\Farmalitycs.domi\\Farmalitycs.Domain.csproj"
             },

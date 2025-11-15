@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Farmalitycs.Application\Farmalitycs.Application.csproj" />
     <ProjectReference Include="..\Farmalitycs.domi\Farmalitycs.Domain.csproj" />
     <ProjectReference Include="..\Farmalitycs.Infrastructure\Farmalitycs.Infrastructure.csproj" />
   </ItemGroup>
