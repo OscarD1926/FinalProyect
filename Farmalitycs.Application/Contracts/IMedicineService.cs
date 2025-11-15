@@ -1,13 +1,15 @@
 ﻿using Farmalitycs.Application.Dtos;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Farmalitycs.Application.Contracts
+namespace Farmalitycs.Application.Contract
 {
     public interface IMedicineService
     {
-        Task<IEnumerable<MedicineDto>> GetAllAsync();
+        Task<List<MedicineDto>> GetAllAsync();
         Task<MedicineDto> GetByIdAsync(int id);
-        Task AddAsync(MedicineDto dto);
-        Task UpdateAsync(MedicineDto dto);
-        Task DeleteAsync(int id);
+        Task<MedicineDto> CreateAsync(MedicineDto dto);
+        Task<bool> UpdateAsync(int id, MedicineDto dto);
+        Task<bool> DeleteAsync(int id);
     }
 }

@@ -1,34 +1,38 @@
-﻿using Farmalitycs.Application.Contracts;
+﻿using Farmalitycs.Application.Contract;
 using Farmalitycs.Application.Dtos;
-using Farmalitycs.Infrastructure.Context;
+using Farmalitycs.Infrastructure.Interfaces;
 using Farmalitycs.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Farmalitycs.Application.Services
 {
     public class MedicineService : IMedicineService
     {
-        private readonly FarmalitycsContext _context;
+        private readonly IMedicineRepository _repo;
 
-        public MedicineService(FarmalitycsContext context)
+        public MedicineService(IMedicineRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
-        public async Task<IEnumerable<MedicineDto>> GetAllAsync() =>
-            await _context.Medicines
-                .Select(m => new MedicineDto
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    Type = m.Type,
-                    ExpirationDate = m.ExpirationDate,
-                    StockQuantity = m.StockQuantity
-                }).ToListAsync();
+        public async Task<List<MedicineDto>> GetAllAsync()
+        {
+            var entities = await _repo.GetAllAsync();
+            return entities.Select(m => new MedicineDto
+            {
+                Id = m.Id,
+                Name = m.Name,
+                Type = m.Type,
+                ExpirationDate = m.ExpirationDate,
+                StockQuantity = m.StockQuantity
+            }).ToList();
+        }
 
         public async Task<MedicineDto> GetByIdAsync(int id)
         {
-            var m = await _context.Medicines.FindAsync(id);
+            var m = await _repo.GetByIdAsync(id);
             if (m == null) return null;
             return new MedicineDto
             {
@@ -40,36 +44,41 @@ namespace Farmalitycs.Application.Services
             };
         }
 
-        public async Task AddAsync(MedicineDto dto)
+        public async Task<MedicineDto> CreateAsync(MedicineDto dto)
         {
-            var m = new Medicine
+            var entity = new Medicine
             {
                 Name = dto.Name,
                 Type = dto.Type,
                 ExpirationDate = dto.ExpirationDate,
                 StockQuantity = dto.StockQuantity
             };
-            _context.Medicines.Add(m);
-            await _context.SaveChangesAsync();
+            await _repo.AddAsync(entity);
+            dto.Id = entity.Id;
+            return dto;
         }
 
-        public async Task UpdateAsync(MedicineDto dto)
+        public async Task<bool> UpdateAsync(int id, MedicineDto dto)
         {
-            var m = await _context.Medicines.FindAsync(dto.Id);
-            if (m == null) return;
-            m.Name = dto.Name;
-            m.Type = dto.Type;
-            m.ExpirationDate = dto.ExpirationDate;
-            m.StockQuantity = dto.StockQuantity;
-            await _context.SaveChangesAsync();
+            var entity = await _repo.GetByIdAsync(id);
+            if (entity == null) return false;
+
+            entity.Name = dto.Name;
+            entity.Type = dto.Type;
+            entity.ExpirationDate = dto.ExpirationDate;
+            entity.StockQuantity = dto.StockQuantity;
+
+            await _repo.UpdateAsync(entity);
+            return true;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var m = await _context.Medicines.FindAsync(id);
-            if (m == null) return;
-            _context.Medicines.Remove(m);
-            await _context.SaveChangesAsync();
+            var entity = await _repo.GetByIdAsync(id);
+            if (entity == null) return false;
+
+            await _repo.DeleteAsync(id);
+            return true;
         }
     }
 }

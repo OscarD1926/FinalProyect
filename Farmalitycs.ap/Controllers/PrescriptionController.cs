@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Farmalitycs.Infrastructure.Interfaces;
-using Farmalitycs.Domain.Entities;
-using System.Collections.Generic;
+﻿using Farmalitycs.Application.Contract;
+using Farmalitycs.Application.Contracts;
+using Farmalitycs.Application.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Farmalitycs.ap.Controllers
@@ -10,75 +10,69 @@ namespace Farmalitycs.ap.Controllers
     [Route("api/[controller]")]
     public class PrescriptionController : ControllerBase
     {
-        private readonly IPrescriptionRepository _repo;
+        private readonly IPrescriptionService _service;
 
-        public PrescriptionController(IPrescriptionRepository repo)
+        public PrescriptionController(IPrescriptionService service)
         {
-            _repo = repo;
+            _service = service;
         }
 
-        
+        // GET ALL
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<Prescription> prescriptions = await _repo.GetAllAsync();
-            return Ok(prescriptions);
+            var result = await _service.GetAllAsync();
+            return Ok(result);
         }
 
-        
+        // GET BY ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            Prescription prescription = await _repo.GetByIdAsync(id);
-            if (prescription == null) return NotFound();
-            return Ok(prescription);
+            var result = await _service.GetByIdAsync(id);
+
+            if (result == null)
+                return NotFound("No existe una prescripción con el ID {id}");
+
+            return Ok(result);
         }
 
-       
+        
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Prescription prescription)
+        public async Task<IActionResult> Create([FromBody] PrescriptionDto dto)
         {
-            if (prescription == null)
-                return BadRequest("Prescription cannot be null");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);  
 
-            await _repo.AddAsync(prescription);
-            return CreatedAtAction(nameof(GetById), new { id = prescription.Id }, prescription);
+            var created = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-       
+        
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Prescription prescription)
+        public async Task<IActionResult> Update(int id, [FromBody] PrescriptionDto dto)
         {
-            if (prescription == null)
-                return BadRequest("Prescription cannot be null");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var existing = await _repo.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
+            var updated = await _service.UpdateAsync(id, dto);
 
-            existing.PatientId = prescription.PatientId;
-            existing.MedicineId = prescription.MedicineId;
-            existing.Medicines = prescription.Medicines ?? new List<Medicine>();
-            existing.IssueDate = prescription.IssueDate;
-            existing.Instructions = prescription.Instructions;
-
-            await _repo.UpdateAsync(existing);
+            if (!updated)
+                return NotFound("No existe una prescripción con el ID {id}");
 
             return NoContent();
         }
 
-        
+     
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _repo.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
+            var deleted = await _service.DeleteAsync(id);
 
-            await _repo.DeleteAsync(id);
+            if (!deleted)
+                return NotFound("No existe una prescripción con el ID {id}");
+
             return NoContent();
         }
     }
 }
-
-

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Farmalitycs.Infrastructure.Interfaces;
-using Farmalitycs.Domain.Entities;
-using System.Collections.Generic;
+using Farmalitycs.Application.Dtos;
+using Farmalitycs.Application.Contracts;
 using System.Threading.Tasks;
 
 namespace Farmalitycs.ap.Controllers
@@ -10,57 +9,56 @@ namespace Farmalitycs.ap.Controllers
     [Route("api/[controller]")]
     public class SaleController : ControllerBase
     {
-        private readonly ISaleRepository _repo;
+        private readonly ISaleService _service;
 
-        public SaleController(ISaleRepository repo)
+        public SaleController(ISaleService service)
         {
-            _repo = repo;
+            _service = service;
         }
 
         
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<Sale> sales = await _repo.GetAllAsync();
-            return Ok(sales);
+            var result = await _service.GetAllAsync();
+            return Ok(result);
         }
 
         
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            Sale sale = await _repo.GetByIdAsync(id);
-            if (sale == null) return NotFound();
+            var sale = await _service.GetByIdAsync(id);
+
+            if (sale == null)
+                return NotFound("No existe una venta con el ID {id}");
+
             return Ok(sale);
         }
 
-        
+      
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Sale sale)
+        public async Task<IActionResult> Create([FromBody] SaleDto dto)
         {
-            if (sale == null)
-                return BadRequest("Sale cannot be null");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);    
 
-            await _repo.AddAsync(sale);
-            return CreatedAtAction(nameof(GetById), new { id = sale.Id }, sale);
+            var created = await _service.CreateAsync(dto);
+
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        
+        // UPDATE
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Sale sale)
+        public async Task<IActionResult> Update(int id, [FromBody] SaleDto dto)
         {
-            if (sale == null)
-                return BadRequest("Sale cannot be null");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            var existing = await _repo.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
+            var updated = await _service.UpdateAsync(id, dto);
 
-            existing.PrescriptionId = sale.PrescriptionId;
-            existing.SaleDate = sale.SaleDate;
-            existing.TotalAmount = sale.TotalAmount;
-
-            await _repo.UpdateAsync(existing);
+            if (!updated)
+                return NotFound("No existe una venta con el ID {id}");
 
             return NoContent();
         }
@@ -69,13 +67,12 @@ namespace Farmalitycs.ap.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _repo.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
+            var deleted = await _service.DeleteAsync(id);
 
-            await _repo.DeleteAsync(id);
+            if (!deleted)
+                return NotFound("No existe una venta con el ID {id}");
+
             return NoContent();
         }
     }
 }
-

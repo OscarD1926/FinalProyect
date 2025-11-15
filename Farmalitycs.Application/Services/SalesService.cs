@@ -1,30 +1,39 @@
 ﻿using Farmalitycs.Application.Contracts;
 using Farmalitycs.Application.Dtos;
-using Farmalitycs.Infrastructure.Context;
+using Farmalitycs.Infrastructure.Interfaces;
 using Farmalitycs.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Farmalitycs.Application.Services
 {
-    public class SalesService : ISalesService
+    public class SaleService : ISaleService
     {
-        private readonly FarmalitycsContext _context;
-        public SalesService(FarmalitycsContext context) => _context = context;
+        private readonly ISaleRepository _repo;
 
-        public async Task<IEnumerable<SaleDto>> GetAllAsync() =>
-            await _context.Sales
-                .Select(s => new SaleDto
-                {
-                    Id = s.Id,
-                    PrescriptionId = s.PrescriptionId,
-                    SaleDate = s.SaleDate,
-                    TotalAmount = s.TotalAmount
-                }).ToListAsync();
+        public SaleService(ISaleRepository repo)
+        {
+            _repo = repo;
+        }
+
+        public async Task<List<SaleDto>> GetAllAsync()
+        {
+            var entities = await _repo.GetAllAsync();
+            return entities.Select(s => new SaleDto
+            {
+                Id = s.Id,
+                PrescriptionId = s.PrescriptionId,
+                SaleDate = s.SaleDate,
+                TotalAmount = s.TotalAmount
+            }).ToList();
+        }
 
         public async Task<SaleDto> GetByIdAsync(int id)
         {
-            var s = await _context.Sales.FindAsync(id);
+            var s = await _repo.GetByIdAsync(id);
             if (s == null) return null;
+
             return new SaleDto
             {
                 Id = s.Id,
@@ -34,34 +43,40 @@ namespace Farmalitycs.Application.Services
             };
         }
 
-        public async Task AddAsync(SaleDto dto)
+        public async Task<SaleDto> CreateAsync(SaleDto dto)
         {
-            var s = new Sale
+            var entity = new Sale
             {
                 PrescriptionId = dto.PrescriptionId,
                 SaleDate = dto.SaleDate,
                 TotalAmount = dto.TotalAmount
             };
-            _context.Sales.Add(s);
-            await _context.SaveChangesAsync();
+
+            await _repo.AddAsync(entity);
+            dto.Id = entity.Id;
+            return dto;
         }
 
-        public async Task UpdateAsync(SaleDto dto)
+        public async Task<bool> UpdateAsync(int id, SaleDto dto)
         {
-            var s = await _context.Sales.FindAsync(dto.Id);
-            if (s == null) return;
-            s.PrescriptionId = dto.PrescriptionId;
-            s.SaleDate = dto.SaleDate;
-            s.TotalAmount = dto.TotalAmount;
-            await _context.SaveChangesAsync();
+            var entity = await _repo.GetByIdAsync(id);
+            if (entity == null) return false;
+
+            entity.PrescriptionId = dto.PrescriptionId;
+            entity.SaleDate = dto.SaleDate;
+            entity.TotalAmount = dto.TotalAmount;
+
+            await _repo.UpdateAsync(entity);
+            return true;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var s = await _context.Sales.FindAsync(id);
-            if (s == null) return;
-            _context.Sales.Remove(s);
-            await _context.SaveChangesAsync();
+            var entity = await _repo.GetByIdAsync(id);
+            if (entity == null) return false;
+
+            await _repo.DeleteAsync(id);
+            return true;
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Farmalitycs.Infrastructure.Interfaces;
-using Farmalitycs.Domain.Entities;
-using System.Collections.Generic;
+﻿using Farmalitycs.Application.Contract;
+using Farmalitycs.Application.Contracts;
+using Farmalitycs.Application.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Farmalitycs.ap.Controllers
@@ -10,73 +10,61 @@ namespace Farmalitycs.ap.Controllers
     [Route("api/[controller]")]
     public class PatientController : ControllerBase
     {
-        private readonly IPatientRepository _repo;
+        private readonly IPatientService _service;
 
-        public PatientController(IPatientRepository repo)
+        public PatientController(IPatientService service)
         {
-            _repo = repo;
+            _service = service;
         }
 
-        
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<Patient> patients = await _repo.GetAllAsync();
-            return Ok(patients);
+            var list = await _service.GetAllAsync();
+            return Ok(list);
         }
 
-        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            Patient patient = await _repo.GetByIdAsync(id);
-            if (patient == null) return NotFound();
-            return Ok(patient);
-        }
-
-        
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Patient patient)
-        {
-            if (patient == null)
-                return BadRequest("Patient cannot be null");
-
-            await _repo.AddAsync(patient);
-            return CreatedAtAction(nameof(GetById), new { id = patient.Id }, patient);
-        }
-
-        
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Patient patient)
-        {
-            if (patient == null)
-                return BadRequest("Patient cannot be null");
-
-            var existing = await _repo.GetByIdAsync(id);
-            if (existing == null)
+            var item = await _service.GetByIdAsync(id);
+            if (item == null)
                 return NotFound();
 
-            existing.FullName = patient.FullName;
-            existing.Identification = patient.Identification;
-            existing.Phone = patient.Phone;
+            return Ok(item);
+        }
 
-            await _repo.UpdateAsync(existing);
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] PatientDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);   
+
+            var created = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] PatientDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);   
+
+            var success = await _service.UpdateAsync(id, dto);
+            if (!success)
+                return NotFound();
 
             return NoContent();
         }
 
-        
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _repo.GetByIdAsync(id);
-            if (existing == null)
+            var success = await _service.DeleteAsync(id);
+            if (!success)
                 return NotFound();
 
-            await _repo.DeleteAsync(id);
             return NoContent();
         }
     }
 }
-
-

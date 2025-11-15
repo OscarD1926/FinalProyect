@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Farmalitycs.ap")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad675ad1b458a96ff6a6bc09a77f9adb99e9b51d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+adb293980072fd228042762440800d488499fa0c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Farmalitycs.ap")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Farmalitycs.ap")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

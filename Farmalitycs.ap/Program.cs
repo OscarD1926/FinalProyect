@@ -1,3 +1,4 @@
+using Farmalitycs.Application.Contract;   // ? CORREGIDO (sin S)
 using Farmalitycs.Application.Contracts;
 using Farmalitycs.Application.Services;
 using Farmalitycs.Infrastructure.Context;
@@ -18,7 +19,8 @@ builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
-builder.Services.AddScoped<ISalesService, SalesService>();
+builder.Services.AddScoped<ISaleService, SaleService>();
+
 
 builder.Services.AddControllers();
 
